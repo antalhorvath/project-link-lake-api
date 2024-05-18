@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: linklake
+server:
+  servlet:
+    context-path: /api
+
+okta:
+  oauth2:
+    issuer: https://vathevor.eu.auth0.com/
+    audience: https://linklake.vathevor.com

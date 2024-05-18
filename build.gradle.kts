@@ -11,6 +11,12 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_21
 }
 
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -18,8 +24,11 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.okta.spring:okta-spring-boot-starter:3.0.6")
+	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test:6.2.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
