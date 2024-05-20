@@ -1,0 +1,35 @@
+---
+title: LinkLake database schema design
+---
+erDiagram
+
+    USER_IDENTITY {
+        string user_id PK
+        string idp_sub
+    }
+
+    LINK {
+        string link_id PK
+        stirng user_id FK
+        string name
+        string link
+    }
+
+    TAG {
+        string tag_id PK
+        string user_id FK
+        string name
+    }
+
+    LINK_TAG_JOIN {
+        string user_id FK
+        string link_id FK
+        string tag_id FK
+    }
+
+    USER_IDENTITY ||--o{ LINK : has
+    USER_IDENTITY ||--o{ TAG : has
+    LINK_TAG_JOIN }o--|| USER_IDENTITY : joins
+    LINK_TAG_JOIN }o--|| LINK : joins
+    LINK_TAG_JOIN }o--|| TAG : joins
+
