@@ -1,9 +1,9 @@
 package com.vathevor.shared.spring.identity;
 
+import com.vathevor.shared.util.ShortUUID;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +19,7 @@ class InMemoryUserIdentityRepositoryTest {
 
     @Test
     void finds_saved_user_identity() {
-        var userIdentity = new UserIdentity(UUID.randomUUID(), "dummySub");
+        var userIdentity = new UserIdentity(ShortUUID.randomUUID(), "dummySub");
         repository.save(userIdentity);
 
         Optional<UserIdentity> userIdentityByIdpSub = repository.findUserIdentityByIdpSub("dummySub");
