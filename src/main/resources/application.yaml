@@ -1,6 +1,15 @@
 spring:
   application:
     name: linklake
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:linklake}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    default-schema: linklake-flyway
+
 server:
   servlet:
     context-path: /api
