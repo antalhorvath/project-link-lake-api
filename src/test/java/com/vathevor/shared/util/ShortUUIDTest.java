@@ -1,6 +1,7 @@
 package com.vathevor.shared.util;
 
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -28,6 +29,15 @@ class ShortUUIDTest {
     void generates_simple_uuid() {
         var uuid = ShortUUID.randomUUID();
         assertThat(uuid.value())
+                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+    }
+
+    @RepeatedTest(value = 100)
+    void creates_simple_uuid_from_hyphenless_uuid_string() {
+        var hyphenlessUuidString = UUID.randomUUID()
+                .toString()
+                .replace("-", "");
+        assertThat(ShortUUID.fromString(hyphenlessUuidString).value())
                 .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
     }
 
@@ -63,5 +73,11 @@ class ShortUUIDTest {
     void converts_to_standard_uuid() {
         var uuid = new ShortUUID();
         assertDoesNotThrow(uuid::toUUID);
+    }
+
+    @RepeatedTest(value = 100)
+    void stringifies_value_only() {
+        assertThat(ShortUUID.randomUUID().toString())
+                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
     }
 }

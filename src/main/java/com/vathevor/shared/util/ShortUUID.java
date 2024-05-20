@@ -42,6 +42,10 @@ public record ShortUUID(String value) {
         return removeHyphens(uuid.toString());
     }
 
+    public static ShortUUID fromString(String shortUUIDString) {
+        return new ShortUUID(shortUUIDString);
+    }
+
     /**
      * Creates a ShortUUID with hyphenless String value of the provided UUID.
      * @param uuid java.lang.UUID
