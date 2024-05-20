@@ -1,9 +1,9 @@
 package com.vathevor.shared.spring.identity;
 
-import java.util.UUID;
+import com.vathevor.shared.util.ShortUUID;
 
 public record UserIdentity(
-        UUID uuid,
+        ShortUUID userId,
         String idpSub
 ) {
 }

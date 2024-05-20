@@ -1,5 +1,6 @@
 package com.vathevor.shared.spring.identity;
 
+import com.vathevor.shared.util.ShortUUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -11,7 +12,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.security.Principal;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -23,10 +23,10 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         if (parameter.hasParameterAnnotation(UserId.class)) {
-            if (parameter.getParameterType().equals(UUID.class)) {
+            if (parameter.getParameterType().equals(ShortUUID.class)) {
                 return true;
             } else {
-                log.error("@UserId argument requires type java.util.UUID, but found: {}", parameter.getParameterType());
+                log.error("@UserId argument requires type com.vathevor.shared.util.ShortUUID, but found: {}", parameter.getParameterType());
                 return false;
             }
         } else {
@@ -45,13 +45,13 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
 
         return principalName.flatMap(userIdentityRepository::findUserIdentityByIdpSub)
                 .or(() -> principalName.map(this::initialiseUserIdentity))
-                .map(UserIdentity::uuid)
+                .map(UserIdentity::userId)
                 .orElseThrow();
     }
 
     private UserIdentity initialiseUserIdentity(String idpSub) {
         log.info("Initialise user identity for: {}", idpSub);
-        var userIdentity = new UserIdentity(UUID.randomUUID(), idpSub);
+        var userIdentity = new UserIdentity(ShortUUID.randomUUID(), idpSub);
         userIdentityRepository.save(userIdentity);
         log.info("Initialised new user identity: {}", userIdentity);
         return userIdentity;

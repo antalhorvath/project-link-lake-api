@@ -1,5 +1,6 @@
 package com.vathevor.shared.spring.identity;
 
+import com.vathevor.shared.util.ShortUUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,13 +43,13 @@ class UserIdResolverTest {
     @MethodSource("methodParams")
     void supports_the_type_provided_in_method(String methodName, Class<?> paramType, boolean expectedToSupport) throws NoSuchMethodException {
         class DummyController {
-            public void userIdUuidMethod(@UserId UUID userId) {
+            public void userIdUuidMethod(@UserId ShortUUID userId) {
             }
 
             public void userIdStringMethod(@UserId String userId) {
             }
 
-            public void uuidMethod(UUID userId) {
+            public void uuidMethod(ShortUUID userId) {
             }
 
             public void stringMethod(String userId) {
@@ -62,9 +63,9 @@ class UserIdResolverTest {
 
     static Stream<Arguments> methodParams() {
         return Stream.of(
-                Arguments.of("userIdUuidMethod", UUID.class, true),
+                Arguments.of("userIdUuidMethod", ShortUUID.class, true),
                 Arguments.of("userIdStringMethod", String.class, false),
-                Arguments.of("uuidMethod", UUID.class, false),
+                Arguments.of("uuidMethod", ShortUUID.class, false),
                 Arguments.of("stringMethod", String.class, false)
         );
     }
@@ -84,7 +85,7 @@ class UserIdResolverTest {
         var captor = ArgumentCaptor.forClass(UserIdentity.class);
         verify(userIdentityRepository).save(captor.capture());
         var savedUserIdentity = captor.getValue();
-        assertThat(savedUserIdentity.uuid())
+        assertThat(savedUserIdentity.userId())
                 .isNotNull()
                 .isEqualTo(userId);
         assertThat(savedUserIdentity.idpSub()).isEqualTo(idpSub);
@@ -107,7 +108,7 @@ class UserIdResolverTest {
     @Test
     void retrieves_existing_user_identity_without_saving_it_again() {
         var idpSub = "dummyIdpSub";
-        var userIdentity = new UserIdentity(UUID.randomUUID(), idpSub);
+        var userIdentity = new UserIdentity(ShortUUID.randomUUID(), idpSub);
         when(userIdentityRepository.findUserIdentityByIdpSub(idpSub))
                 .thenReturn(Optional.of(userIdentity));
 
@@ -117,7 +118,7 @@ class UserIdResolverTest {
                 mockWebRequest(idpSub),
                 mock(WebDataBinderFactory.class));
 
-        assertThat(userId).isEqualTo(userIdentity.uuid());
+        assertThat(userId).isEqualTo(userIdentity.userId());
         verifyNoMoreInteractions(userIdentityRepository);
     }
 }
