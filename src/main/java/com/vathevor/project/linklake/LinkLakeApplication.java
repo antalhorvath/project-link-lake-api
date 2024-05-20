@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 @Import({
 		UserIdResolverConfig.class
 })
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
 public class LinkLakeApplication {
 
 	public static void main(String[] args) {
