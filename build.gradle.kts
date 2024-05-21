@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("org.hsqldb:hsqldb")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test:6.2.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
