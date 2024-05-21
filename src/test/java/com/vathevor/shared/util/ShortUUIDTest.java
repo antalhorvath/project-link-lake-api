@@ -17,19 +17,20 @@ class ShortUUIDTest {
 
     Predicate<String> containsOnlyAlphaNumericLetters = value -> value.matches("[0-9a-fA-F]+");
     Predicate<String> containsThirtyTwoLetters = value -> value.length() == 32;
+    Predicate<String> shortUuidStringFormat = containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters);
 
     @RepeatedTest(value = 100)
     void creates_simple_uuid_via_empty_constructor() {
         var uuid = new ShortUUID();
         assertThat(uuid.value())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+                .matches(shortUuidStringFormat);
     }
 
     @RepeatedTest(value = 100)
     void generates_simple_uuid() {
         var uuid = ShortUUID.randomUUID();
         assertThat(uuid.value())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+                .matches(shortUuidStringFormat);
     }
 
     @RepeatedTest(value = 100)
@@ -37,22 +38,22 @@ class ShortUUIDTest {
         var hyphenlessUuidString = UUID.randomUUID()
                 .toString()
                 .replace("-", "");
+
         assertThat(ShortUUID.fromString(hyphenlessUuidString).value())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+                .matches(shortUuidStringFormat);
     }
 
     @RepeatedTest(value = 100)
     void creates_simple_uuid_from_standard_uuid() {
         var uuid = ShortUUID.fromUUID(UUID.randomUUID());
         assertThat(uuid.value())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+                .matches(shortUuidStringFormat);
     }
 
     @RepeatedTest(value = 100)
     void creates_simple_uuid_from_standard_uuid_string() {
         var uuid = ShortUUID.fromUUIDString(UUID.randomUUID().toString());
-        assertThat(uuid.value())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+        assertThat(uuid.value()).matches(shortUuidStringFormat);
     }
 
     @ParameterizedTest(name = "Throws exception when value \"{0}\" is not a hyphenless UUID.")
@@ -78,6 +79,6 @@ class ShortUUIDTest {
     @RepeatedTest(value = 100)
     void stringifies_value_only() {
         assertThat(ShortUUID.randomUUID().toString())
-                .matches(containsOnlyAlphaNumericLetters.and(containsThirtyTwoLetters));
+                .matches(shortUuidStringFormat);
     }
 }
