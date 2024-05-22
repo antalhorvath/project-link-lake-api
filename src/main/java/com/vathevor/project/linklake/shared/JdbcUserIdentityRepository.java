@@ -26,7 +26,7 @@ public class JdbcUserIdentityRepository implements UserIdentityRepository {
     @Override
     public Optional<UserIdentity> findUserIdentityByIdpSub(String idpSub) {
         log.info("Find userIdentity by idpSub: {}", idpSub);
-        return jdbcClient.sql("SELECT user_id, idp_sub FROM linklake.user_identity where idp_sub = :idp_sub")
+        return jdbcClient.sql("SELECT user_id, idp_sub FROM linklake.user_identity WHERE idp_sub = :idp_sub")
                 .param("idp_sub", idpSub)
                 .query(USER_IDENTITY_ROW_MAPPER)
                 .optional();
