@@ -1,4 +1,4 @@
-package com.vathevor.project.linklake.app.controller;
+package com.vathevor.project.linklake.query.application.link;
 
 import com.vathevor.shared.spring.identity.UserId;
 import com.vathevor.shared.util.ShortUUID;
@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @RestController
 @RequestMapping("/links")
-public class QueryLinksController {
+public class LinkQueryController {
 
     @GetMapping
     public List<String> queryLinks(@UserId ShortUUID userId) {

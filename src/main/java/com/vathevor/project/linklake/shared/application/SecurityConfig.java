@@ -1,4 +1,4 @@
-package com.vathevor.project.linklake.app.config;
+package com.vathevor.project.linklake.shared.application;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
