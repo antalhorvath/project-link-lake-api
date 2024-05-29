@@ -21,15 +21,22 @@ erDiagram
         string name
     }
 
-    LINK_TAG_JOIN {
+    RESOURCE {
+        string resource_id PK
         string user_id FK
-        string link_id FK
+        string name
+    }
+
+    RESOURCE_TAG {
+        string user_id FK
+        string resource_id FK
         string tag_id FK
     }
 
     USER_IDENTITY ||--o{ LINK : has
     USER_IDENTITY ||--o{ TAG : has
-    LINK_TAG_JOIN }o--|| USER_IDENTITY : joins
-    LINK_TAG_JOIN }o--|| LINK : joins
-    LINK_TAG_JOIN }o--|| TAG : joins
+    USER_IDENTITY ||--o{ RESOURCE : has
+    RESOURCE_TAG }o--|| USER_IDENTITY : joins
+    RESOURCE_TAG }o--|| TAG : joins
+    RESOURCE_TAG }o--|| RESOURCE : joins
 

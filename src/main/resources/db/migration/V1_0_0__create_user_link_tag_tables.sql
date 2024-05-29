@@ -1,9 +1,9 @@
--- Schema: Application specific schema ---------------------------------------------------------------------------------
+-- Schema: linklake  ---------------------------------------------------------------------------------------------------
 
 CREATE SCHEMA IF NOT EXISTS linklake;
 
 
--- Table: linklake.user_identity ---------------------------------------------------------------------------------------
+-- Table ---------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS linklake.user_identity
 (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS linklake.user_identity
 );
 
 
--- Table: linklake.link ------------------------------------------------------------------------------------------------
+-- Table ---------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS linklake.link
 (
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS linklake.link
 );
 
 
--- Table: linklake.tag -------------------------------------------------------------------------------------------------
+-- Table ---------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS linklake.tag
 (
@@ -45,22 +45,37 @@ CREATE TABLE IF NOT EXISTS linklake.tag
 );
 
 
--- Table: linklake.link_tag --------------------------------------------------------------------------------------------
+-- Table ---------------------------------------------------------------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS linklake.link_tag
+CREATE TABLE IF NOT EXISTS linklake.resource
 (
-    user_id character varying(32) NOT NULL,
-    link_id character varying(32) NOT NULL,
-    tag_id  character varying(32) NOT NULL,
+    resource_id character varying(32)  NOT NULL,
+    user_id     character varying(32)  NOT NULL,
+    name        character varying(128) NOT NULL,
 
-    CONSTRAINT user_fk_of_link_tag FOREIGN KEY (user_id)
+    CONSTRAINT resource_pk PRIMARY KEY (resource_id),
+
+    CONSTRAINT user_fk_of_resource FOREIGN KEY (user_id)
+        REFERENCES linklake.user_identity (user_id)
+);
+
+
+-- Table ---------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS linklake.resource_tag
+(
+    user_id     character varying(32) NOT NULL,
+    resource_id character varying(32) NOT NULL,
+    tag_id      character varying(32) NOT NULL,
+
+    CONSTRAINT user_fk_of_resource_tag FOREIGN KEY (user_id)
         REFERENCES linklake.user_identity (user_id),
 
-    CONSTRAINT link_fk_of_link_tag FOREIGN KEY (link_id)
-        REFERENCES linklake.link (link_id)
+    CONSTRAINT link_fk_of_resource_tag FOREIGN KEY (resource_id)
+        REFERENCES linklake.resource (resource_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT tag_fk_of_link_tab FOREIGN KEY (tag_id)
+    CONSTRAINT tag_fk_of_resource_tag FOREIGN KEY (tag_id)
         REFERENCES linklake.tag (tag_id)
         ON DELETE CASCADE
 );

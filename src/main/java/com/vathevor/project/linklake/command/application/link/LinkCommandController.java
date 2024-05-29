@@ -1,7 +1,7 @@
 package com.vathevor.project.linklake.command.application.link;
 
 import com.vathevor.project.linklake.command.domain.link.LinkCommandService;
-import com.vathevor.project.linklake.command.domain.link.LinkEntity;
+import com.vathevor.project.linklake.command.domain.link.SaveLinkCommand;
 import com.vathevor.shared.spring.identity.UserId;
 import com.vathevor.shared.util.ShortUUID;
 import jakarta.validation.Valid;
@@ -21,10 +21,10 @@ public class LinkCommandController {
     @PutMapping("/{linkId}")
     public ResponseEntity<Void> saveLink(@UserId ShortUUID userId,
                                          @PathVariable ShortUUID linkId,
-                                         @Valid @RequestBody SaveLinkRequest request) {
+                                         @Valid @RequestBody SaveLinkCommand request) {
         log.info("Received request: {}", request);
-        LinkEntity entityToSave = request.toEntity(userId, linkId);
-        service.save(entityToSave);
+        var entity = request.toEntity(userId, linkId);
+        service.save(entity);
         return ResponseEntity.noContent().build();
     }
 }
