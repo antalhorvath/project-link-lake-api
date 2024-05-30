@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
+import static com.vathevor.project.linklake.shared.SharedTestConstants.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = LinkJdbcWriteRepository.class)
@@ -21,7 +22,7 @@ class LinkJdbcWriteRepositoryTest extends BaseJdbcRepositoryTest {
     void saves_link() {
         LinkEntity link = LinkEntity.builder()
                 .linkId(ShortUUID.randomUUID())
-                .userId(userId)
+                .userId(USER_ID)
                 .name("example")
                 .link("https://example.com")
                 .build();

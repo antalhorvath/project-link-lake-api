@@ -11,7 +11,7 @@ public class LinkCommandService {
 
     private final LinkRepository repository;
 
-    public void save(LinkEntity link) {
-        repository.save(link);
+    public void save(LinkEntity linkEntity) {
+        repository.save(linkEntity);
     }
 }

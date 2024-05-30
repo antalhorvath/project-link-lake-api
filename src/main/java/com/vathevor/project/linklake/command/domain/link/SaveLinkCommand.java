@@ -1,13 +1,12 @@
-package com.vathevor.project.linklake.command.application.link;
+package com.vathevor.project.linklake.command.domain.link;
 
-import com.vathevor.project.linklake.command.domain.link.LinkEntity;
 import com.vathevor.shared.util.ShortUUID;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record SaveLinkRequest(
+public record SaveLinkCommand(
 
         @NotNull(message = "name is required")
         @NotBlank(message = "name is required")
@@ -22,7 +21,7 @@ public record SaveLinkRequest(
         String link
 ) {
 
-        LinkEntity toEntity(ShortUUID userId, ShortUUID linkId) {
+        public LinkEntity toEntity(ShortUUID userId, ShortUUID linkId) {
                 return LinkEntity.builder()
                         .userId(userId)
                         .linkId(linkId)

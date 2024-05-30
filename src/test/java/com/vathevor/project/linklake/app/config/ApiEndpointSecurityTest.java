@@ -1,6 +1,7 @@
 package com.vathevor.project.linklake.app.config;
 
 import com.vathevor.project.linklake.command.domain.link.LinkCommandService;
+import com.vathevor.project.linklake.command.domain.tag.TagResourceCommandService;
 import com.vathevor.shared.util.ShortUUID;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,6 +30,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class ApiEndpointSecurityTest {
 
     @MockBean
+    TagResourceCommandService tagResourceCommandService;
+
+    @MockBean
     LinkCommandService linkCommandService;
 
     @Autowired
@@ -54,7 +58,8 @@ class ApiEndpointSecurityTest {
     static Stream<Arguments> applicationEndpoints() {
         return Stream.of(
                 Arguments.of(HttpMethod.GET, "/links"),
-                Arguments.of(HttpMethod.PUT, "/links/" + ShortUUID.randomUUID())
+                Arguments.of(HttpMethod.PUT, "/links/" + ShortUUID.randomUUID()),
+                Arguments.of(HttpMethod.PUT, "/resources/" + ShortUUID.randomUUID())
         );
     }
 }
