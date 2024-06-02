@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
@@ -19,13 +21,19 @@ public class LinkJdbcWriteRepository implements LinkRepository {
             .userId(ShortUUID.fromUUIDString(rs.getString("user_id")))
             .name(rs.getString("name"))
             .link(rs.getString("link"))
+            .modifiedAt(LocalDate.parse(rs.getString("modified_at")))
             .build();
 
     private final JdbcClient jdbcClient;
 
     @Override
     public Optional<LinkEntity> findUsersLinkById(ShortUUID linkId, ShortUUID userId) {
-        return jdbcClient.sql("SELECT link_id, user_id, name, link FROM linklake.link WHERE link_id = :link_id AND user_id = :user_id")
+        return jdbcClient.sql("""
+                        SELECT link_id, user_id, name, link, modified_at
+                        FROM linklake.link
+                        WHERE link_id = :link_id
+                          AND user_id = :user_id
+                        """)
                 .param("link_id", linkId.value())
                 .param("user_id", userId.value())
                 .query(LINK_MAPPER)
@@ -34,11 +42,15 @@ public class LinkJdbcWriteRepository implements LinkRepository {
 
     @Override
     public void save(LinkEntity link) {
-        jdbcClient.sql("INSERT INTO linklake.link (link_id, user_id, name, link) VALUES (:link_id, :user_id, :name, :link)")
+        jdbcClient.sql("""
+                        INSERT INTO linklake.link (link_id, user_id, name, link, modified_at)
+                        VALUES (:link_id, :user_id, :name, :link, :modified_at)
+                        """)
                 .param("link_id", link.linkId().value())
                 .param("user_id", link.userId().value())
                 .param("name", link.name())
                 .param("link", link.link())
+                .param("modified_at", Date.valueOf(link.modifiedAt()))
                 .update();
     }
 }

@@ -39,7 +39,7 @@ class TagResourceCommandServiceTest extends BaseJdbcRepositoryTest {
     TagResourceCommandService service;
 
     TaggedResourceEntity taggedResourceEntity = TaggedResourceEntity.builder()
-            .userId(SharedTestConstants.USER_ID)
+            .userId(SharedTestConstants.USER_1_ID)
             .resourceId(RESOURCE_ID)
             .name(RESOURCE_NAME)
             .tag(TAG_1)

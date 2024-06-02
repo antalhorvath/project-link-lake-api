@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS linklake.link
     user_id character varying(32)  NOT NULL,
     name    character varying(128) NOT NULL,
     link    character varying(512) NOT NULL,
+    modified_at date NOT NULL,
 
     CONSTRAINT link_pk PRIMARY KEY (link_id),
 
