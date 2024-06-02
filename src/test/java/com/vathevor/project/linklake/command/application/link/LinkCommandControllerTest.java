@@ -17,6 +17,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.OAuth2LoginRequestPostProcessor;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -60,6 +61,7 @@ class LinkCommandControllerTest {
                 .userId(userIdentity.userId())
                 .name("example")
                 .link("https://example.com")
+                .modifiedAt(LocalDate.now())
                 .build();
 
         mockMvc.perform(

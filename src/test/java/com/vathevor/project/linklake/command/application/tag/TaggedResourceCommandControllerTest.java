@@ -46,7 +46,7 @@ class TaggedResourceCommandControllerTest {
 
     @BeforeEach
     void setUp() {
-        userIdentity = new UserIdentity(SharedTestConstants.USER_ID, "dummySub");
+        userIdentity = new UserIdentity(SharedTestConstants.USER_1_ID, "dummySub");
 
         when(userIdentityRepository.findUserIdentityByIdpSub(userIdentity.idpSub()))
                 .thenReturn(Optional.of(userIdentity));
@@ -59,7 +59,7 @@ class TaggedResourceCommandControllerTest {
     void saves_tagged_resource() throws Exception {
         TaggedResourceEntity taggedResource = TaggedResourceEntity.builder()
                 .resourceId(ShortUUID.randomUUID())
-                .userId(SharedTestConstants.USER_ID)
+                .userId(SharedTestConstants.USER_1_ID)
                 .name("resource name")
                 .tag(TAG_1)
                 .tag(TAG_2)

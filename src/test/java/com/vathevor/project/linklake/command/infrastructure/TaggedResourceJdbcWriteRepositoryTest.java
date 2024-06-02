@@ -22,7 +22,7 @@ class TaggedResourceJdbcWriteRepositoryTest extends BaseJdbcRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        insertUser();
+        insertUsers();
         insertTag(TAG_1);
         insertTag(TAG_2);
     }
@@ -37,7 +37,7 @@ class TaggedResourceJdbcWriteRepositoryTest extends BaseJdbcRepositoryTest {
 
     @Test
     void returns_empty_when_resource_not_found_by_id() {
-        Optional<TaggedResourceEntity> resource = repository.findUserResourceById(SharedTestConstants.USER_ID, RESOURCE_ID);
+        Optional<TaggedResourceEntity> resource = repository.findUserResourceById(SharedTestConstants.USER_1_ID, RESOURCE_ID);
         assertThat(resource).isEmpty();
     }
 
@@ -45,14 +45,14 @@ class TaggedResourceJdbcWriteRepositoryTest extends BaseJdbcRepositoryTest {
     void saves_resource() {
         TaggedResourceEntity taggedResource = TaggedResourceEntity.builder()
                 .resourceId(RESOURCE_ID)
-                .userId(SharedTestConstants.USER_ID)
+                .userId(SharedTestConstants.USER_1_ID)
                 .name(RESOURCE_NAME)
                 .tag(TAG_1)
                 .tag(TAG_2)
                 .build();
 
         repository.saveTaggedResource(taggedResource);
-        Optional<TaggedResourceEntity> retrievedResource = repository.findUserResourceById(SharedTestConstants.USER_ID, RESOURCE_ID);
+        Optional<TaggedResourceEntity> retrievedResource = repository.findUserResourceById(SharedTestConstants.USER_1_ID, RESOURCE_ID);
 
         assertThat(retrievedResource).isPresent().contains(taggedResource);
     }

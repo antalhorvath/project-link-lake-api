@@ -17,10 +17,10 @@ class SaveTaggedResourceCommandTest {
                 .tag(SAVE_TAG_2_COMMAND)
                 .build();
 
-        TaggedResourceEntity entity = command.toEntity(SharedTestConstants.USER_ID, RESOURCE_ID);
+        TaggedResourceEntity entity = command.toEntity(SharedTestConstants.USER_1_ID, RESOURCE_ID);
 
         assertThat(entity).isEqualTo(TaggedResourceEntity.builder()
-                .userId(SharedTestConstants.USER_ID)
+                .userId(SharedTestConstants.USER_1_ID)
                 .resourceId(RESOURCE_ID)
                 .name(RESOURCE_NAME)
                 .tag(TAG_1)

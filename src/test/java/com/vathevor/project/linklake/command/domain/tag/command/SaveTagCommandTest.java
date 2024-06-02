@@ -13,10 +13,10 @@ class SaveTagCommandTest {
 
     @Test
     void converts_to_entity() {
-        TagEntity entity = SAVE_TAG_1_COMMAND.toEntity(SharedTestConstants.USER_ID);
+        TagEntity entity = SAVE_TAG_1_COMMAND.toEntity(SharedTestConstants.USER_1_ID);
         assertThat(entity).isEqualTo(
                 TagEntity.builder()
-                        .userId(SharedTestConstants.USER_ID)
+                        .userId(SharedTestConstants.USER_1_ID)
                         .tagId(TAG_1_ID)
                         .name(TAG_1_NAME)
                         .build()
@@ -28,7 +28,7 @@ class SaveTagCommandTest {
         List<TagEntity> entities = SaveTagCommand.toEntities(List.of(
                 SAVE_TAG_1_COMMAND,
                 SAVE_TAG_2_COMMAND
-        ), SharedTestConstants.USER_ID);
+        ), SharedTestConstants.USER_1_ID);
         assertThat(entities).containsExactlyInAnyOrder(TAG_1, TAG_2);
     }
 }

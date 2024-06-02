@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
 public record SaveLinkCommand(
 
         @NotNull(message = "name is required")
@@ -27,6 +29,7 @@ public record SaveLinkCommand(
                         .linkId(linkId)
                         .name(name)
                         .link(link)
+                        .modifiedAt(LocalDate.now())
                         .build();
         }
 }

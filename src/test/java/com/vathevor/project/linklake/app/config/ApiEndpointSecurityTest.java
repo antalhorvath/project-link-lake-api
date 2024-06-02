@@ -2,6 +2,7 @@ package com.vathevor.project.linklake.app.config;
 
 import com.vathevor.project.linklake.command.domain.link.LinkCommandService;
 import com.vathevor.project.linklake.command.domain.tag.TagResourceCommandService;
+import com.vathevor.project.linklake.query.domain.link.LinkQueryService;
 import com.vathevor.shared.util.ShortUUID;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +35,9 @@ class ApiEndpointSecurityTest {
 
     @MockBean
     LinkCommandService linkCommandService;
+
+    @MockBean
+    LinkQueryService linkQueryService;
 
     @Autowired
     MockMvc mockMvc;

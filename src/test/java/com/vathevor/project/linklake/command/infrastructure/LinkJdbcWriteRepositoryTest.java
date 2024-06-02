@@ -7,9 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.vathevor.project.linklake.shared.SharedTestConstants.USER_ID;
+import static com.vathevor.project.linklake.shared.SharedTestConstants.USER_1_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ContextConfiguration(classes = LinkJdbcWriteRepository.class)
@@ -22,9 +23,10 @@ class LinkJdbcWriteRepositoryTest extends BaseJdbcRepositoryTest {
     void saves_link() {
         LinkEntity link = LinkEntity.builder()
                 .linkId(ShortUUID.randomUUID())
-                .userId(USER_ID)
+                .userId(USER_1_ID)
                 .name("example")
                 .link("https://example.com")
+                .modifiedAt(LocalDate.now())
                 .build();
 
         repository.save(link);
