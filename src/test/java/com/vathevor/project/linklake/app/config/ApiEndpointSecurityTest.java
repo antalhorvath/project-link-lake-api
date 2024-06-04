@@ -68,6 +68,7 @@ class ApiEndpointSecurityTest {
                 Arguments.of(HttpMethod.GET, "/links"),
                 Arguments.of(HttpMethod.GET, "/tags"),
                 Arguments.of(HttpMethod.PUT, "/links/" + ShortUUID.randomUUID()),
+                Arguments.of(HttpMethod.DELETE, "/links/" + ShortUUID.randomUUID()),
                 Arguments.of(HttpMethod.PUT, "/resources/" + ShortUUID.randomUUID())
         );
     }
