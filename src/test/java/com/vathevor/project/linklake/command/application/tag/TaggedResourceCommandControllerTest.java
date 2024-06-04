@@ -1,6 +1,6 @@
 package com.vathevor.project.linklake.command.application.tag;
 
-import com.vathevor.project.linklake.command.domain.tag.TagResourceCommandService;
+import com.vathevor.project.linklake.command.domain.tag.TaggedResourceCommandService;
 import com.vathevor.project.linklake.command.domain.tag.entity.TaggedResourceEntity;
 import com.vathevor.project.linklake.shared.BaseMockMvcTest;
 import com.vathevor.project.linklake.shared.SharedTestConstants;
@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import static com.vathevor.project.linklake.command.domain.tag.TagTestConstants.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,11 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TaggedResourceCommandControllerTest extends BaseMockMvcTest {
 
     @MockBean
-    TagResourceCommandService tagResourceCommandService;
+    TaggedResourceCommandService taggedResourceCommandService;
 
     @Test
     void saves_tagged_resource() throws Exception {
-        TaggedResourceEntity taggedResource = TaggedResourceEntity.builder()
+        var taggedResource = TaggedResourceEntity.builder()
                 .resourceId(ShortUUID.randomUUID())
                 .userId(SharedTestConstants.USER_1_ID)
                 .name("resource name")
@@ -62,6 +63,23 @@ class TaggedResourceCommandControllerTest extends BaseMockMvcTest {
                 )
                 .andExpect(status().isNoContent());
 
-        verify(tagResourceCommandService).save(taggedResource);
+        verify(taggedResourceCommandService).save(taggedResource);
+    }
+
+    @Test
+    void deletes_tagged_resource() throws Exception {
+        var taggedResource = TaggedResourceEntity.builder()
+                .resourceId(ShortUUID.randomUUID())
+                .userId(userIdentity.userId())
+                .build();
+
+        mockMvc.perform(
+                        delete("/resources/" + taggedResource.resourceId().value())
+                                .with(oauth2Login)
+                                .with(csrf())
+                )
+                .andExpect(status().isNoContent());
+
+        verify(taggedResourceCommandService).delete(taggedResource);
     }
 }

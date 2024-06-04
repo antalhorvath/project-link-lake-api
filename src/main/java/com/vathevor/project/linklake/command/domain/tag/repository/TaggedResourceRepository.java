@@ -10,4 +10,6 @@ public interface TaggedResourceRepository {
     Optional<TaggedResourceEntity> findUserResourceById(ShortUUID userId, ShortUUID resourceId);
 
     void saveTaggedResource(TaggedResourceEntity taggedResource);
+
+    void delete(TaggedResourceEntity resourceToDelete);
 }

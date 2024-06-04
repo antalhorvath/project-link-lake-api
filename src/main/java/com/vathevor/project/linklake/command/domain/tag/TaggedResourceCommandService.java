@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class TagResourceCommandService {
+public class TaggedResourceCommandService {
 
     private final TagRepository tagRepository;
     private final TaggedResourceRepository taggedResourceRepository;
@@ -24,5 +24,10 @@ public class TagResourceCommandService {
         Set<TagEntity> tagsToCreate = taggedResource.filterTagsToCreate(existingTagIds);
         tagRepository.saveAll(tagsToCreate);
         taggedResourceRepository.saveTaggedResource(taggedResource);
+    }
+
+    @Transactional
+    public void delete(TaggedResourceEntity resourceToDelete) {
+        taggedResourceRepository.delete(resourceToDelete);
     }
 }

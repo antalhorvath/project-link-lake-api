@@ -94,4 +94,16 @@ public class TaggedResourceJdbcWriteRepository implements TaggedResourceReposito
                     ps.setString(3, tag.tagId().value());
                 });
     }
+
+    @Override
+    public void delete(TaggedResourceEntity resourceToDelete) {
+        jdbcClient.sql("DELETE FROM linklake.resource_tag WHERE user_id = :user_id AND resource_id = :resource_id")
+                .param(USER_ID, resourceToDelete.userId().value())
+                .param(RESOURCE_ID, resourceToDelete.resourceId().value())
+                .update();
+        jdbcClient.sql("DELETE FROM linklake.resource WHERE user_id = :user_id AND resource_id = :resource_id")
+                .param(USER_ID, resourceToDelete.userId().value())
+                .param(RESOURCE_ID, resourceToDelete.resourceId().value())
+                .update();
+    }
 }
