@@ -53,4 +53,12 @@ public class LinkJdbcWriteRepository implements LinkRepository {
                 .param("modified_at", Date.valueOf(link.modifiedAt()))
                 .update();
     }
+
+    @Override
+    public void delete(LinkEntity linkEntity) {
+        jdbcClient.sql("DELETE FROM linklake.link WHERE user_id = :user_id AND link_id = :link_id")
+                .param("user_id", linkEntity.userId().value())
+                .param("link_id", linkEntity.linkId().value())
+                .update();
+    }
 }

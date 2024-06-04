@@ -14,4 +14,8 @@ public class LinkCommandService {
     public void save(LinkEntity linkEntity) {
         repository.save(linkEntity);
     }
+
+    public void delete(LinkEntity linkEntity) {
+        repository.delete(linkEntity);
+    }
 }

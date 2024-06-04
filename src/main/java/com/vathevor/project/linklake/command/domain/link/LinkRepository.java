@@ -9,4 +9,6 @@ public interface LinkRepository {
     Optional<LinkEntity> findUsersLinkById(ShortUUID linkId, ShortUUID userId);
 
     void save(LinkEntity link);
+
+    void delete(LinkEntity linkEntity);
 }

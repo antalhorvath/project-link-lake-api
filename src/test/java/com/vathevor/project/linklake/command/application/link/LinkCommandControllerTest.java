@@ -2,101 +2,99 @@ package com.vathevor.project.linklake.command.application.link;
 
 import com.vathevor.project.linklake.command.domain.link.LinkCommandService;
 import com.vathevor.project.linklake.command.domain.link.LinkEntity;
-import com.vathevor.shared.spring.identity.UserIdentity;
-import com.vathevor.shared.spring.identity.UserIdentityRepository;
+import com.vathevor.project.linklake.shared.BaseMockMvcTest;
 import com.vathevor.shared.util.ShortUUID;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.OAuth2LoginRequestPostProcessor;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("feature")
 @WebMvcTest(controllers = LinkCommandController.class)
-@AutoConfigureMockMvc
-class LinkCommandControllerTest {
-
-    @MockBean
-    UserIdentityRepository userIdentityRepository;
+class LinkCommandControllerTest extends BaseMockMvcTest {
 
     @MockBean
     LinkCommandService linkCommandService;
 
-    @Autowired
-    MockMvc mockMvc;
+    @Nested
+    class SaveLink {
+        @Test
+        void saves_link() throws Exception {
+            LinkEntity link = LinkEntity.builder()
+                    .linkId(ShortUUID.randomUUID())
+                    .userId(userIdentity.userId())
+                    .name("example")
+                    .link("https://example.com")
+                    .modifiedAt(LocalDate.now())
+                    .build();
 
-    UserIdentity userIdentity;
+            mockMvc.perform(
+                            put("/links/" + link.linkId().value())
+                                    .with(oauth2Login)
+                                    .with(csrf())
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content("""
+                                            {
+                                                "name": "example",
+                                                "link": "https://example.com"
+                                            }
+                                            """)
+                    )
+                    .andExpect(status().isNoContent());
 
-    OAuth2LoginRequestPostProcessor oauth2Login;
+            verify(linkCommandService).save(link);
+        }
 
-    @BeforeEach
-    void setUp() {
-        userIdentity = new UserIdentity(ShortUUID.randomUUID(), "dummySub");
+        @Test
+        void responds_with_bad_request() throws Exception {
+            mockMvc.perform(
+                            put("/links/" + ShortUUID.randomUUID().value())
+                                    .with(oauth2Login)
+                                    .with(csrf())
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content("""
+                                            {
+                                                "name": "",
+                                                "link": ""
+                                            }
+                                            """)
+                    )
+                    .andExpect(status().isBadRequest());
 
-        when(userIdentityRepository.findUserIdentityByIdpSub(userIdentity.idpSub()))
-                .thenReturn(Optional.of(userIdentity));
-
-        oauth2Login = SecurityMockMvcRequestPostProcessors.oauth2Login()
-                .attributes(attr -> attr.put("sub", userIdentity.idpSub()));
+            verifyNoInteractions(linkCommandService);
+        }
     }
 
-    @Test
-    void saves_link() throws Exception {
-        LinkEntity link = LinkEntity.builder()
-                .linkId(ShortUUID.randomUUID())
-                .userId(userIdentity.userId())
-                .name("example")
-                .link("https://example.com")
-                .modifiedAt(LocalDate.now())
-                .build();
+    @Nested
+    class DeleteLink {
 
-        mockMvc.perform(
-                        put("/links/" + link.linkId().value())
-                                .with(oauth2Login)
-                                .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                            "name": "example",
-                                            "link": "https://example.com"
-                                        }
-                                        """)
-                )
-                .andExpect(status().isNoContent());
+        @Test
+        void deletes_link() throws Exception {
+            LinkEntity link = LinkEntity.builder()
+                    .linkId(ShortUUID.randomUUID())
+                    .userId(userIdentity.userId())
+                    .build();
 
-        verify(linkCommandService).save(link);
-    }
+            mockMvc.perform(
+                            delete("/links/" + link.linkId().value())
+                                    .with(oauth2Login)
+                                    .with(csrf())
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent());
 
-    @Test
-    void responds_with_bad_request() throws Exception {
-        mockMvc.perform(
-                        put("/links/" + ShortUUID.randomUUID().value())
-                                .with(oauth2Login)
-                                .with(csrf())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                            "name": "",
-                                            "link": ""
-                                        }
-                                        """)
-                )
-                .andExpect(status().isBadRequest());
-
-        verifyNoInteractions(linkCommandService);
+            verify(linkCommandService).delete(link);
+        }
     }
 }
