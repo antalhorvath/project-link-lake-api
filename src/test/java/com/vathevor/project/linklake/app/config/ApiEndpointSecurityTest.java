@@ -1,7 +1,7 @@
 package com.vathevor.project.linklake.app.config;
 
 import com.vathevor.project.linklake.command.domain.link.LinkCommandService;
-import com.vathevor.project.linklake.command.domain.tag.TagResourceCommandService;
+import com.vathevor.project.linklake.command.domain.tag.TaggedResourceCommandService;
 import com.vathevor.project.linklake.query.domain.link.LinkQueryService;
 import com.vathevor.project.linklake.query.domain.tag.TagQueryService;
 import com.vathevor.shared.util.ShortUUID;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class ApiEndpointSecurityTest {
 
     @MockBean
-    TagResourceCommandService tagResourceCommandService;
+    TaggedResourceCommandService taggedResourceCommandService;
 
     @MockBean
     LinkCommandService linkCommandService;
