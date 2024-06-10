@@ -16,7 +16,7 @@ import static com.vathevor.project.linklake.shared.SharedTestConstants.USER_1_ID
 import static org.mockito.Mockito.when;
 
 @AutoConfigureMockMvc
-public class BaseMockMvcTest {
+public abstract class BaseMockMvcTest {
 
     @MockBean
     UserIdentityRepository userIdentityRepository;
