@@ -16,9 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JdbcUserIdentityRepository implements UserIdentityRepository {
 
+    private static final String IDP_SUB = "idp_sub";
+    private static final String USER_ID = "user_id";
+
     private static final RowMapper<UserIdentity> USER_IDENTITY_ROW_MAPPER = (rs, rowNum) -> new UserIdentity(
-            ShortUUID.fromString(rs.getString("user_id")),
-            rs.getString("idp_sub")
+            ShortUUID.fromString(rs.getString(USER_ID)),
+            rs.getString(IDP_SUB)
     );
 
     private final JdbcClient jdbcClient;
@@ -27,7 +30,7 @@ public class JdbcUserIdentityRepository implements UserIdentityRepository {
     public Optional<UserIdentity> findUserIdentityByIdpSub(String idpSub) {
         log.info("Find userIdentity by idpSub: {}", idpSub);
         return jdbcClient.sql("SELECT user_id, idp_sub FROM linklake.user_identity WHERE idp_sub = :idp_sub")
-                .param("idp_sub", idpSub)
+                .param(IDP_SUB, idpSub)
                 .query(USER_IDENTITY_ROW_MAPPER)
                 .optional();
     }
@@ -36,8 +39,8 @@ public class JdbcUserIdentityRepository implements UserIdentityRepository {
     public void save(UserIdentity userIdentity) {
         log.info("Save: {}", userIdentity);
         jdbcClient.sql("INSERT INTO linklake.user_identity (user_id, idp_sub) VALUES (:user_id, :idp_sub)")
-                .param("user_id", userIdentity.userId().value())
-                .param("idp_sub", userIdentity.idpSub())
+                .param(USER_ID, userIdentity.userId().value())
+                .param(IDP_SUB, userIdentity.idpSub())
                 .update();
     }
 }
